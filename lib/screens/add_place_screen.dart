@@ -53,13 +53,13 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                     decoration: InputDecoration(label: Text('Titlte')),
                   ),
                   const SizedBox(height: 10),
-                  const ImageInput(),
+                  ImageInput(_selectImage),
                 ],
               ),
             )),
           ),
           ElevatedButton.icon(
-            onPressed: () {},
+            onPressed: _savePlace,
             style: ElevatedButton.styleFrom(
                 backgroundColor: Theme.of(context).accentColor),
             icon: const Icon(Icons.add),
