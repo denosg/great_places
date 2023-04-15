@@ -45,3 +45,6 @@ app.*.map.json
 
 # Ignore .env files
 .env
+
+# Ignore Maps API KEY
+string.xml
