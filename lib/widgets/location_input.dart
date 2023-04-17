@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 import '../helpers/location_helper.dart';
 import '../screens/maps_screen.dart';
 
 class LocationInput extends StatefulWidget {
-  const LocationInput({super.key});
+  final Function onSelectPlace;
+
+  LocationInput(this.onSelectPlace);
 
   @override
   State<LocationInput> createState() => _LocationInputState();
@@ -14,21 +17,31 @@ class LocationInput extends StatefulWidget {
 class _LocationInputState extends State<LocationInput> {
   String _previewImageUrl = '';
 
-  Future<void> _getCurrentUserLocation() async {
-    final locData = await Location().getLocation();
-    final latitude = locData.latitude;
-    final longitude = locData.longitude;
-    if (latitude != null && longitude != null) {
+  void _showPreview(double? lat, double? lng) {
+    if (lat != null && lng != null) {
       final staticMapImageUrl = LocationHelper.generateLocationPreviewImage(
-          latitude: latitude, longitude: longitude);
+          latitude: lat, longitude: lng);
       setState(() {
         _previewImageUrl = staticMapImageUrl;
       });
     }
   }
 
+  Future<void> _getCurrentUserLocation() async {
+    try {
+      final locData = await Location().getLocation();
+      final latitude = locData.latitude;
+      final longitude = locData.longitude;
+      _showPreview(latitude, longitude);
+      widget.onSelectPlace(latitude, longitude);
+    } on Exception catch (e) {
+      return;
+    }
+  }
+
   Future<void> _selectOnMap() async {
-    final selectedLocation = await Navigator.of(context).push(MaterialPageRoute(
+    final LatLng? selectedLocation =
+        await Navigator.of(context).push<LatLng>(MaterialPageRoute(
       fullscreenDialog: true,
       builder: (context) => const MapScreen(
         isSelecting: true,
@@ -37,7 +50,8 @@ class _LocationInputState extends State<LocationInput> {
     if (selectedLocation == null) {
       return;
     }
-    // ...
+    _showPreview(selectedLocation.latitude, selectedLocation.longitude);
+    widget.onSelectPlace(selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override

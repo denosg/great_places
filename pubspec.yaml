@@ -16,6 +16,7 @@ dependencies:
   location: ^4.4.0
   flutter_dotenv: ^5.0.2
   google_maps_flutter: ^2.2.5
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
