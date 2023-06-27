@@ -60,7 +60,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
                 children: [
                   TextField(
                     controller: _titleController,
-                    decoration: InputDecoration(label: Text('Titlte')),
+                    decoration: const InputDecoration(label: Text('Titlte')),
                   ),
                   const SizedBox(height: 10),
                   ImageInput(_selectImage),
